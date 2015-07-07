@@ -788,6 +788,11 @@ static const CGFloat MAX_TRIGGER_OFFSET = 100.0;
 
 - (void)setRootViewController:(UIViewController *)controller replaceToOrigin:(BOOL)replace {
     if (_rootViewController != controller) {
+        [_rootViewController addObserver:self
+                              forKeyPath:@"view.frame"
+                                 options:NSKeyValueObservingOptionNew
+                                 context:NULL];
+
         [self willChangeValueForKey:@"rootViewController"];
         
         [self removeAllGestures];
@@ -813,11 +818,6 @@ static const CGFloat MAX_TRIGGER_OFFSET = 100.0;
             if (!PPSystemVersionGreaterOrEqualThan(5.0)) [_rootViewController viewDidAppear:NO];
             
             if (PPSystemVersionGreaterOrEqualThan(5.0)) [_rootViewController didMoveToParentViewController:self];
-            
-            [_rootViewController addObserver:self
-                                  forKeyPath:@"view.frame"
-                                     options:NSKeyValueObservingOptionNew
-                                     context:NULL];
             
             [self addGesturesToCenterController];
             
